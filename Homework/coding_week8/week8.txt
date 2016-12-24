@@ -1,0 +1,130 @@
+Copying an object is often an alternative to aliasing. The copy module contains a function
+called copy that can duplicate any object:
+>>> p1 = Point()
+>>> p1.x = 3.0
+>>> p1.y = 4.0
+>>> import copy
+>>> p2 = copy.copy(p1)
+p1 and p2 contain the same data, but they are not the same Point.
+>>> print_point(p1)
+(3.0, 4.0)
+>>> print_point(p2)
+(3.0, 4.0)
+>>> p1 is p2
+False
+>>> p1 == p2
+False
+
+
+
+>>> box2 = copy.copy(box)
+>>> box2 is box
+False
+>>> box2.corner is box.corner
+True
+Figure 15.3 shows what the object diagram looks like. This operation is called a shallow
+copy because it copies the object and any references it contains, but not the embedded
+objects.
+
+
+
+Fortunately, the copy module contains a method named deepcopy that copies not only the
+object but also the objects it refers to, and the objects they refer to, and so on. You will not
+be surprised to learn that this operation is called a deep copy.
+>>> box3 = copy.deepcopy(box)
+>>> box3 is box
+False
+>>> box3.corner is box.corner
+False
+box3 and box are completely separate objects.
+
+
+If you are not sure whether an object has a particular attribute, you can use the built-in
+function hasattr:
+>>> hasattr(p, 'x')
+True
+>>> hasattr(p, 'z')
+False
+
+
+As another example of a user-defined type, we’ll define a class called Time that records the
+time of day. The class definition looks like this:
+class Time(object):
+"""Represents the time of day.
+attributes: hour, minute, second
+"""
+We can create a new Time object and assign attributes for hours, minutes, and seconds:
+time = Time()
+time.hour = 11
+time.minute = 59
+time.second = 30
+
+
+Or you could use an assert statement, which checks a given invariant and raises an exception
+if it fails:
+def add_time(t1, t2):
+assert valid_time(t1) and valid_time(t2)
+seconds = time_to_int(t1) + time_to_int(t2)
+return int_to_time(seconds)
+assert statements are useful because they distinguish code that deals with normal conditions
+from code that checks for errors.
+
+
+
+
+To make print_time a method, all we have to do is move the function definition inside the
+class definition. Notice the change in indentation.
+class Time(object):
+def print_time(time):
+print '%.2d:%.2d:%.2d' % (time.hour, time.minute, time.second)
+Now there are two ways to call print_time. The first (and less common) way is to use
+function syntax:
+>>> Time.print_time(start)
+09:45:00
+To make print_time a method, all we have to do is move the function definition inside the
+class definition. Notice the change in indentation.
+class Time(object):
+def print_time(time):
+print '%.2d:%.2d:%.2d' % (time.hour, time.minute, time.second)
+Now there are two ways to call print_time. The first (and less common) way is to use
+function syntax:
+>>> Time.print_time(start)
+09:45:00
+
+
+
+
+
+By defining other special methods, you can specify the behavior of operators on userdefined
+types. For example, if you define a method named __add__ for the Time class,
+you can use the + operator on Time objects.
+Here is what the definition might look like:
+# inside class Time:
+def __add__(self, other):
+seconds = self.time_to_int() + other.time_to_int()
+return int_to_time(seconds)
+And here is how you could use it:
+>>> start = Time(9, 45)
+>>> duration = Time(1, 35)
+>>> print start + duration
+11:20:00
+When you apply the + operator to Time objects, Python invokes __add__. When you print
+the result, Python invokes __str__. So there is quite a lot happening behind the scenes!
+
+
+
+
+Another way to access the attributes of an object is through the special attribute __dict__,
+which is a dictionary that maps attribute names (as strings) and values:
+>>> p = Point(3, 4)
+>>> print p.__dict__
+{'y': 4, 'x': 3}
+
+For purposes of debugging, you might find it useful to keep this function handy:
+def print_attributes(obj):
+for attr in obj.__dict__:
+print attr, getattr(obj, attr)
+print_attributes traverses the items in the object’s dictionary and prints each attribute
+name and its corresponding value.
+The built-in function getattr takes an object and an attribute name (as a string) and returns
+the attribute’s value.

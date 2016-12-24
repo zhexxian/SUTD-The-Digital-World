@@ -1,0 +1,29 @@
+ def getNextValues(self, state, inp):
+        sonars = inp.sonars
+        
+        if state == 'Start':
+            if sonars[2]>0.35:
+                state, fwd, rot = 'Start',0.2,0
+            else:
+                state, fwd, rot = 'leftTurn',0,0.2
+                
+        elif state == 'leftTurn':
+            if sonars[2]>0.35 and (sonars[3]/sonars[4] >= 1.45):
+                state, fwd, rot = 'Straight', 0.2, 0
+            else:
+                state, fwd, rot = 'leftTurn', 0, 0.2   
+                         
+        elif state == 'Straight':
+            if sonars[4] > 0.5:
+                state,fwd,rot='rightTurn',0,0
+            elif sonars[2] <0.35:
+                state, fwd, rot = 'leftTurn',0,0.2                
+            else:
+                state,fwd,rot = 'Straight',0.2,0
+                
+        elif state=='rightTurn':
+            state,fwd,rot = 'rightTurn',0.20,-0.5
+            if sonars[2]<=0.7:
+                state,fwd,rot='leftTurn',0,0
+        
+        return (state, io.Action(fvel = fwd, rvel = rot))

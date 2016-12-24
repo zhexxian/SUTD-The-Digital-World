@@ -1,0 +1,145 @@
+from time import sleep
+from finch import Finch
+
+finch = Finch()
+x, y, z, tap, shake = finch.acceleration()
+
+
+
+# PART 1: MOVE TOWARDS THE TARGET!
+
+while True:
+    finch.wheels(0.6, 0.6)
+    
+    if finch.obstacle()in [(True,True),(False,True)]:
+        break
+    print finch.obstacle()
+finch.wheels(0,0)
+
+# PART 2: LIGHT AND BEEP TILL BEING HUGGED!
+
+while True:
+    finch.led("#FF0000")
+    finch.buzzer(1.0, 250)
+    sleep(1.05)
+    finch.led("#0000FF")
+    finch.buzzer(1.0, 400)
+    sleep(1.05)
+    print("X is %.2f gees, Y is %.2f gees, Z is %.2f gees, tap is %r shake is %r" % (x, y, z, tap, shake))
+    x, y, z, tap, shake = finch.acceleration()
+
+    if x > -0.5 and x < 0.5 and y > -0.5 and y < 0.5 and z < -0.7:
+        
+        break
+finch.buzzer(1.0, 300)
+sleep(5)
+
+
+# PART 3:SING WHEN NOTE IS LIFTED UP!
+
+while True:
+    print finch.light()
+    finch.led("#FF0000")
+    sleep(0.3)
+    finch.led("#FF6633")
+    sleep(0.3)
+    finch.led("#FFFF00")
+    sleep(0.3)
+    if finch.light()[0] >  (0.35) or finch.light()[1] > (0.11):
+        break
+    print finch.light()
+    finch.led("#009900")
+    sleep(0.3)
+    finch.led("#00FFFF")
+    sleep(0.3)
+    finch.led("#0000FF")
+    sleep(0.3)
+    finch.led("#BB00BB")
+    sleep(0.3)
+    print finch.light()
+    
+
+    if finch.light()[0] >  (0.35) or finch.light()[1] > (0.11):
+        break
+
+   
+finch.buzzer_with_delay(0.25, 311)
+finch.buzzer_with_delay(0.25, 415)
+finch.buzzer_with_delay(0.25, 466)
+finch.buzzer_with_delay(0.5, 466)
+finch.buzzer_with_delay(0.5, 523)
+finch.buzzer_with_delay(2.25, 523)
+finch.buzzer_with_delay(0.25, 415)
+finch.buzzer_with_delay(0.25, 466)
+finch.buzzer_with_delay(0.25, 523)
+finch.buzzer_with_delay(0.5, 466)
+finch.buzzer_with_delay(.5, 622)
+finch.buzzer_with_delay(2.5,622)
+finch.buzzer_with_delay(.25,622)
+finch.buzzer_with_delay(.25,699)
+finch.buzzer_with_delay(.25,784)
+finch.buzzer_with_delay(.5,784)
+finch.buzzer_with_delay(.5,831)
+finch.buzzer_with_delay(1.5,831)
+finch.buzzer_with_delay(.5,932)
+finch.buzzer_with_delay(.1,932)
+finch.buzzer_with_delay(.3,1047)
+finch.buzzer_with_delay(.3,932)
+finch.buzzer_with_delay(.3,831)
+finch.buzzer_with_delay(1,784)
+finch.buzzer_with_delay(1,392)
+finch.buzzer_with_delay(.5,523)
+finch.buzzer_with_delay(.5,831)
+finch.buzzer_with_delay(.5,784)
+finch.buzzer_with_delay(.5,622)
+finch.buzzer_with_delay(.5,622)
+finch.buzzer_with_delay(.5,699)
+finch.buzzer_with_delay(2.5,699)
+finch.buzzer_with_delay(.25,622)
+finch.buzzer_with_delay(.25,554)
+finch.buzzer_with_delay(.5,554)
+finch.buzzer_with_delay(.5,622)
+finch.buzzer_with_delay(2.5,622)
+finch.buzzer_with_delay(.25,415)
+finch.buzzer_with_delay(.25,466)
+finch.buzzer_with_delay(.5,523)
+finch.buzzer_with_delay(.5,554)
+finch.buzzer_with_delay(2,554)
+finch.buzzer_with_delay(.5,622)
+finch.buzzer_with_delay(.5,554)
+finch.buzzer_with_delay(2,523)
+finch.buzzer_with_delay(.5,466)
+finch.buzzer_with_delay(.5,311)
+finch.buzzer_with_delay(.5,415)
+finch.buzzer_with_delay(.5,466)
+
+
+
+
+
+# PART 4: SING MORE WHEN TEMPERATURE CHANGES!
+
+temp=finch.temperature()
+
+while True:
+
+    print temp
+
+
+    if temp > 33.0:
+        break
+    temp=finch.temperature()
+
+
+
+
+finch.buzzer(0.5, 880)
+sleep(2)
+finch.buzzer(0.5, 880)
+sleep(2)
+
+
+
+finch.halt()
+
+finch.close()
